@@ -1,7 +1,7 @@
 ﻿<Project Sdk="MSBuild.Sdk.Extras">
 
   <PropertyGroup>
-    <TargetFrameworks>net462;uap10.0.19041;Xamarin.iOS10;MonoAndroid90;netcoreapp3.1;net6.0-windows;net7.0-windows</TargetFrameworks>
+    <TargetFrameworks>net462;netcoreapp3.1;net6.0-windows;net7.0-windows</TargetFrameworks>
     <PackageId>Caliburn.Micro</PackageId>
     <Product>Caliburn.Micro</Product>
     <RootNamespace>Caliburn.Micro</RootNamespace>
@@ -60,27 +60,6 @@
   <ItemGroup Condition="'$(TargetFramework)' == 'net7.0-windows'">
     <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.37" />
     <Compile Include="Platforms\net46-netcore\**\*.cs" />
-  </ItemGroup>
-  
-  <ItemGroup Label="Package">
-    <None Include="Platforms\uap\Caliburn.Micro.Platform.rd.xml" PackagePath="lib\uap10.0.16299\Caliburn.Micro.Platform\Properties\Caliburn.Micro.Platform.rd.xml" Pack="true" />
-  </ItemGroup>
-
-  <ItemGroup Condition="'$(TargetFramework)' == 'uap10.0.19041'">
-    <Compile Include="Platforms\uap\**\*.cs" />
-    <PackageReference Include="Microsoft.Xaml.Behaviors.Uwp.Managed" Version="2.0.1" />
-  </ItemGroup>
-
-  <ItemGroup Condition="'$(TargetFramework)' == 'MonoAndroid90'">
-    <Compile Remove="*.cs" />
-    <Compile Include="Platforms\android\**\*.cs" />
-    <Compile Include="ViewModelLocator.cs" />
-  </ItemGroup>
-
-  <ItemGroup Condition="'$(TargetFramework)' == 'Xamarin.iOS10'">
-    <Compile Remove="*.cs" />
-    <Compile Include="Platforms\ios\**\*.cs" />
-    <Compile Include="ViewModelLocator.cs" />
   </ItemGroup>
 
 </Project>

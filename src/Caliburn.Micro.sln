@@ -13,10 +13,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Caliburn.Micro.Platform.Tes
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Caliburn.Micro.Platform.Core", "Caliburn.Micro.Platform.Core\Caliburn.Micro.Platform.Core.csproj", "{BFB9D3A5-6710-4729-9890-D7B784C8E8B7}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Caliburn.Micro.Xamarin.Forms", "Caliburn.Micro.Xamarin.Forms\Caliburn.Micro.Xamarin.Forms.csproj", "{A570D69E-B33E-4CDE-86BF-E5B66DF4B0AE}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Caliburn.Micro.Maui", "Caliburn.Micro.Maui\Caliburn.Micro.Maui.csproj", "{50F9A3FD-FCC8-40CD-906E-A4FC6FC40286}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
