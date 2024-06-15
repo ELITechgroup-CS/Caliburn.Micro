@@ -1,10 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
-using Caliburn.Micro.Core;
 using Xunit;
 
 namespace Caliburn.Micro.Core.Tests
@@ -12,7 +7,7 @@ namespace Caliburn.Micro.Core.Tests
     public class ConductWithTests
     {
         [Fact]
-        public async Task Screen_ConductWithTests()
+        public void Screen_ConductWithTests()
         {
             var root = new Screen();
 
@@ -35,13 +30,13 @@ namespace Caliburn.Micro.Core.Tests
             child2.ConductWith(root);
             child3.ConductWith(root);
 
-            await ScreenExtensions.TryActivateAsync(root).ConfigureAwait(false);
+            ScreenExtensions.TryActivate(root);
 
             Assert.True(child1.WasActivated, "child 1 should be active");
             Assert.True(child2.WasActivated, "child 2 should be active");
             Assert.True(child3.WasActivated, "child 3 should be active");
 
-            await ScreenExtensions.TryDeactivateAsync(root, true).ConfigureAwait(false);
+            ScreenExtensions.TryDeactivate(root, true);
 
             Assert.True(child1.IsClosed, "child 1 should be closed");
             Assert.True(child2.IsClosed, "child 2 should be closed");
@@ -49,7 +44,7 @@ namespace Caliburn.Micro.Core.Tests
         }
 
         [Fact]
-        public async Task Conductor_ConductWithTests()
+        public void Conductor_ConductWithTests()
         {
             var root = new Conductor<StateScreen>.Collection.AllActive();
 
@@ -72,13 +67,13 @@ namespace Caliburn.Micro.Core.Tests
             root.Items.Add(child2);
             root.Items.Add(child3);
 
-            await ScreenExtensions.TryActivateAsync(root).ConfigureAwait(false);
+            ScreenExtensions.TryActivate(root);
 
             Assert.True(child1.WasActivated, "child 1 should be active");
             Assert.True(child2.WasActivated, "child 2 should be active");
             Assert.True(child3.WasActivated, "child 3 should be active");
 
-            await ScreenExtensions.TryDeactivateAsync(root, true).ConfigureAwait(false);
+            ScreenExtensions.TryDeactivate(root, true);
 
             Assert.True(child1.IsClosed, "child 1 should be closed");
             Assert.True(child2.IsClosed, "child 2 should be closed");
@@ -100,31 +95,31 @@ namespace Caliburn.Micro.Core.Tests
             public bool IsClosed { get; private set; }
             public bool IsClosable { get; set; }
 
-            public override Task<bool> CanCloseAsync(CancellationToken cancellationToken = default)
+            public override bool CanClose()
             {
-                return Task.FromResult(IsClosable);
+                return IsClosable;
             }
 
-            protected override async Task OnActivateAsync(CancellationToken cancellationToken)
+            protected override void OnActivate()
             {
                 if (deactivationDelay.HasValue)
                 {
-                    await Task.Delay(deactivationDelay.Value, cancellationToken).ConfigureAwait(false);
+                    Thread.Sleep(deactivationDelay.Value);
                 }
 
-                await base.OnActivateAsync(cancellationToken);
+                base.OnActivate();
 
                 WasActivated = true;
                 IsClosable = false;
             }
 
-            protected override async Task OnDeactivateAsync(bool close, CancellationToken cancellationToken = default(CancellationToken))
+            protected override void OnDeactivate(bool close)
             {
-                await base.OnDeactivateAsync(close, cancellationToken).ConfigureAwait(false);
+                base.OnDeactivate(close);
 
                 if (deactivationDelay.HasValue)
                 {
-                    await Task.Delay(deactivationDelay.Value, cancellationToken).ConfigureAwait(false);
+                    Thread.Sleep(deactivationDelay.Value);
                 }
 
                 IsClosed = close;

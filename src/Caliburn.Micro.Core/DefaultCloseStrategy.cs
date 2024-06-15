@@ -1,6 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace Caliburn.Micro
 {
@@ -22,7 +20,7 @@ namespace Caliburn.Micro
         }
 
         /// <inheritdoc />
-        public async Task<ICloseResult<T>> ExecuteAsync(IEnumerable<T> toClose, CancellationToken cancellationToken = default)
+        public ICloseResult<T> Execute(IEnumerable<T> toClose)
         {
             var closeable = new List<T>();
             var closeCanOccur = true;
@@ -31,7 +29,7 @@ namespace Caliburn.Micro
             {
                 if (child is IGuardClose guard)
                 {
-                    var canClose = await guard.CanCloseAsync(cancellationToken);
+                    var canClose = guard.CanClose();
 
                     if (canClose)
                     {
@@ -46,7 +44,7 @@ namespace Caliburn.Micro
                 }
             }
 
-            if (!this.closeConductedItemsWhenConductorCannotClose && !closeCanOccur)
+            if (!closeConductedItemsWhenConductorCannotClose && !closeCanOccur)
             {
                 closeable.Clear();
             }

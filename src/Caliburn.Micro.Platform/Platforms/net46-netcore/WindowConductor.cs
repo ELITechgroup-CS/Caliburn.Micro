@@ -20,11 +20,11 @@ namespace Caliburn.Micro
             this.view = view;
         }
 
-        public async Task InitialiseAsync()
+        public void Initialise()
         {
             if (model is IActivate activator)
             {
-                await activator.ActivateAsync();
+                activator.Activate();
             }
 
             if (model is IDeactivate deactivatable)
@@ -39,7 +39,7 @@ namespace Caliburn.Micro
             }
         }
 
-        private async void Closed(object sender, EventArgs e)
+        private void Closed(object sender, EventArgs e)
         {
             view.Closed -= Closed;
             view.Closing -= Closing;
@@ -52,22 +52,22 @@ namespace Caliburn.Micro
             var deactivatable = (IDeactivate)model;
 
             deactivatingFromView = true;
-            await deactivatable.DeactivateAsync(true);
+            deactivatable.Deactivate(true);
             deactivatingFromView = false;
         }
 
-        private Task Deactivated(object sender, DeactivationEventArgs e)
+        private void Deactivated(object sender, DeactivationEventArgs e)
         {
             if (!e.WasClosed)
             {
-                return Task.FromResult(false);
+                return;
             }
 
             ((IDeactivate)model).Deactivated -= Deactivated;
 
             if (deactivatingFromView)
             {
-                return Task.FromResult(true);
+                return;
             }
 
             deactivateFromViewModel = true;
@@ -75,11 +75,9 @@ namespace Caliburn.Micro
             view.Close();
             actuallyClosing = false;
             deactivateFromViewModel = false;
-
-            return Task.FromResult(true);
         }
 
-        private async void Closing(object sender, CancelEventArgs e)
+        private void Closing(object sender, CancelEventArgs e)
         {
             if (e.Cancel)
             {
@@ -98,9 +96,7 @@ namespace Caliburn.Micro
 
             e.Cancel = true;
 
-            await Task.Yield();
-
-            var canClose = await guard.CanCloseAsync(CancellationToken.None);
+            var canClose = guard.CanClose();
 
             if (!canClose)
                 return;

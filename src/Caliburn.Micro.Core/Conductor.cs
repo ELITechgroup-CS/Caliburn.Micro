@@ -1,6 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace Caliburn.Micro
 {
@@ -10,23 +8,23 @@ namespace Caliburn.Micro
     public partial class Conductor<T> : ConductorBaseWithActiveItem<T> where T : class
     {
         /// <inheritdoc />
-        public override async Task ActivateItemAsync(T item, CancellationToken cancellationToken = default)
+        public override void ActivateItem(T item)
         {
             if (item != null && item.Equals(ActiveItem))
             {
                 if (IsActive)
                 {
-                    await ScreenExtensions.TryActivateAsync(item, cancellationToken);
+                    ScreenExtensions.TryActivate(item);
                     OnActivationProcessed(item, true);
                 }
                 return;
             }
 
-            var closeResult = await CloseStrategy.ExecuteAsync(new[] { ActiveItem }, cancellationToken);
+            var closeResult = CloseStrategy.Execute([ActiveItem]);
 
             if (closeResult.CloseCanOccur)
             {
-                await ChangeActiveItemAsync(item, true, cancellationToken);
+                ChangeActiveItem(item, true);
             }
             else
             {
@@ -41,18 +39,18 @@ namespace Caliburn.Micro
         /// <param name="close">Indicates whether or not to close the item after deactivating it.</param>
         /// <param name="cancellationToken">The cancellation token to cancel operation.</param>
         /// <returns>A task that represents the asynchronous operation.</returns>
-        public override async Task DeactivateItemAsync(T item, bool close, CancellationToken cancellationToken = default)
+        public override void DeactivateItem(T item, bool close)
         {
             if (item == null || !item.Equals(ActiveItem))
             {
                 return;
             }
 
-            var closeResult = await CloseStrategy.ExecuteAsync(new[] { ActiveItem }, CancellationToken.None);
+            var closeResult = CloseStrategy.Execute([ActiveItem]);
 
             if (closeResult.CloseCanOccur)
             {
-                await ChangeActiveItemAsync(default(T), close);
+                ChangeActiveItem(default(T), close);
             }
         }
 
@@ -61,9 +59,9 @@ namespace Caliburn.Micro
         /// </summary>
         /// <param name="cancellationToken">The cancellation token to cancel operation.</param>
         /// <returns>A task that represents the asynchronous operation.</returns>
-        public override async Task<bool> CanCloseAsync(CancellationToken cancellationToken = default )
+        public override bool CanClose()
         {
-            var closeResult = await CloseStrategy.ExecuteAsync(new[] { ActiveItem }, cancellationToken);
+            var closeResult = CloseStrategy.Execute([ActiveItem]);
 
             return closeResult.CloseCanOccur;
         }
@@ -72,9 +70,9 @@ namespace Caliburn.Micro
         /// Called when activating.
         /// </summary>
         /// <returns>A task that represents the asynchronous operation.</returns>
-        protected override Task OnActivateAsync(CancellationToken cancellationToken)
+        protected override void OnActivate()
         {
-            return ScreenExtensions.TryActivateAsync(ActiveItem, cancellationToken);
+            ScreenExtensions.TryActivate(ActiveItem);
         }
 
         /// <summary>
@@ -83,9 +81,9 @@ namespace Caliburn.Micro
         /// <param name="close">Indicates whether this instance will be closed.</param>
         /// <param name="cancellationToken">The cancellation token to cancel operation.</param>
         /// <returns>A task that represents the asynchronous operation.</returns>
-        protected override Task OnDeactivateAsync(bool close, CancellationToken cancellationToken)
+        protected override void OnDeactivate(bool close)
         {
-            return ScreenExtensions.TryDeactivateAsync(ActiveItem, close, cancellationToken);
+            ScreenExtensions.TryDeactivate(ActiveItem, close);
         }
 
         /// <summary>
@@ -94,7 +92,7 @@ namespace Caliburn.Micro
         /// <returns>The collection of children.</returns>
         public override IEnumerable<T> GetChildren()
         {
-            return new[] { ActiveItem };
+            return [ActiveItem];
         }
     }
 }

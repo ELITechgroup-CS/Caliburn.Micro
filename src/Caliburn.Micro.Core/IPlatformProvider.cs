@@ -71,6 +71,6 @@ namespace Caliburn.Micro
         /// <param name="views">The associated views.</param>
         /// <param name="dialogResult">The dialog result.</param>
         /// <returns>An <see cref="Func{T, TResult}"/> to close the view model.</returns>
-        Func<CancellationToken, Task> GetViewCloseAction(object viewModel, ICollection<object> views, bool? dialogResult);
+        Action GetViewCloseAction(object viewModel, ICollection<object> views, bool? dialogResult);
     }
 }

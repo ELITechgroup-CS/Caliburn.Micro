@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace Caliburn.Micro
 {
@@ -19,11 +17,11 @@ namespace Caliburn.Micro
         /// </summary>
         /// <param name="cancellationToken">The cancellation token to cancel operation.</param>
         /// <returns>A task that represents the asynchronous operation.</returns>
-        Task ActivateAsync(CancellationToken cancellationToken = default);
+        void Activate();
 
         /// <summary>
         /// Raised after activation occurs.
         /// </summary>
-        event AsyncEventHandler<ActivationEventArgs> Activated;
+        event EventHandler<ActivationEventArgs> Activated;
     }
 }

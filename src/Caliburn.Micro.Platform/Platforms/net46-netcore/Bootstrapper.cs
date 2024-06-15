@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
 
@@ -203,10 +202,10 @@ namespace Caliburn.Micro
         /// </summary>
         /// <param name="viewModelType">The view model type.</param>
         /// <param name="settings">The optional window settings.</param>
-        protected async Task DisplayRootViewForAsync(Type viewModelType, IDictionary<string, object> settings = null)
+        protected void DisplayRootViewFor(Type viewModelType, IDictionary<string, object> settings = null)
         {
             var windowManager = IoC.Get<IWindowManager>();
-            await windowManager.ShowWindowAsync(IoC.GetInstance(viewModelType, null), null, settings);
+            windowManager.ShowWindow(IoC.GetInstance(viewModelType, null), null, settings);
         }
 
 
@@ -215,9 +214,9 @@ namespace Caliburn.Micro
         /// </summary>
         /// <typeparam name="TViewModel">The view model type.</typeparam>
         /// <param name="settings">The optional window settings.</param>
-        protected Task DisplayRootViewForAsync<TViewModel>(IDictionary<string, object> settings = null)
+        protected void DisplayRootViewFor<TViewModel>(IDictionary<string, object> settings = null)
         {
-            return DisplayRootViewForAsync(typeof(TViewModel), settings);
+            DisplayRootViewFor(typeof(TViewModel), settings);
         }
     }
 }

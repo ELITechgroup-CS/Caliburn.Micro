@@ -34,7 +34,7 @@ namespace Caliburn.Micro
         /// </summary>
         /// <param name="sender"> The event sender. </param>
         /// <param name="e"> The event args. </param>
-        protected virtual async void OnNavigating(object sender, NavigatingCancelEventArgs e)
+        protected virtual void OnNavigating(object sender, NavigatingCancelEventArgs e)
         {
             ExternalNavigatingHandler(sender, e);
             if (e.Cancel)
@@ -50,7 +50,7 @@ namespace Caliburn.Micro
 
             if (fe.DataContext is IGuardClose guard)
             {
-                var canClose = await guard.CanCloseAsync(CancellationToken.None);
+                var canClose = guard.CanClose();
 
                 if (!canClose)
                 {
@@ -65,7 +65,7 @@ namespace Caliburn.Micro
             // e.g. When the app is activated with Fast Switch
             if (deactivator != null && frame.CurrentSource != e.Uri)
             {
-                await deactivator.DeactivateAsync(CanCloseOnNavigating(sender, e), CancellationToken.None);
+                deactivator.Deactivate(CanCloseOnNavigating(sender, e));
             }
         }
 
@@ -84,7 +84,7 @@ namespace Caliburn.Micro
         /// </summary>
         /// <param name="sender"> The event sender. </param>
         /// <param name="e"> The event args. </param>
-        protected virtual async void OnNavigated(object sender, NavigationEventArgs e)
+        protected virtual void OnNavigated(object sender, NavigationEventArgs e)
         {
             if (e.Uri.IsAbsoluteUri || e.Content == null)
             {
@@ -115,7 +115,7 @@ namespace Caliburn.Micro
 
             if (viewModel is IActivate activator)
             {
-                await activator.ActivateAsync();
+                activator.Activate();
             }
 
             GC.Collect();

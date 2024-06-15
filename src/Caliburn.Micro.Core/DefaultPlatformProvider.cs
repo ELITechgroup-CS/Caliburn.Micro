@@ -99,9 +99,9 @@ namespace Caliburn.Micro
         /// <returns>
         /// An <see cref="Action" /> to close the view model.
         /// </returns>
-        public virtual Func<CancellationToken, Task> GetViewCloseAction(object viewModel, ICollection<object> views, bool? dialogResult)
+        public virtual Action GetViewCloseAction(object viewModel, ICollection<object> views, bool? dialogResult)
         {
-            return ct => Task.FromResult(true);
+            return () => { };
         }
     }
 }

@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace Caliburn.Micro
 {
@@ -20,11 +18,11 @@ namespace Caliburn.Micro
         /// <param name="close">Indicates whether or not this instance is being closed.</param>
         /// <param name="cancellationToken">The cancellation token to cancel operation.</param>
         /// <returns>A task that represents the asynchronous operation.</returns>
-        Task DeactivateAsync(bool close, CancellationToken cancellationToken = default);
+        void Deactivate(bool close);
 
         /// <summary>
         /// Raised after deactivation.
         /// </summary>
-        event AsyncEventHandler<DeactivationEventArgs> Deactivated;
+        event EventHandler<DeactivationEventArgs> Deactivated;
     }
 }

@@ -1,6 +1,4 @@
-﻿using System.Threading.Tasks;
-
-namespace Caliburn.Micro
+﻿namespace Caliburn.Micro
 {
     /// <summary>
     /// Denotes an object that can be closed.
@@ -12,6 +10,6 @@ namespace Caliburn.Micro
         /// Also provides an opportunity to pass a dialog result to it's corresponding view.
         /// </summary>
         /// <param name="dialogResult">The dialog result.</param>
-        Task TryCloseAsync(bool? dialogResult = null);
+        void TryClose(bool? dialogResult = null);
     }
 }

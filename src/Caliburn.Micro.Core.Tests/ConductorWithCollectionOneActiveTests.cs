@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace Caliburn.Micro.Core.Tests
@@ -12,14 +10,14 @@ namespace Caliburn.Micro.Core.Tests
             public bool IsClosed { get; private set; }
             public bool IsClosable { get; set; }
 
-            public override Task<bool> CanCloseAsync(CancellationToken cancellationToken)
+            public override bool CanClose()
             {
-                return Task.FromResult(IsClosable);
+                return IsClosable;
             }
 
-            protected override async Task OnDeactivateAsync(bool close, CancellationToken cancellationToken)
+            protected override void OnDeactivate(bool close)
             {
-                await base.OnDeactivateAsync(close, cancellationToken);
+                base.OnDeactivate(close);
                 IsClosed = close;
             }
         }
@@ -34,7 +32,7 @@ namespace Caliburn.Micro.Core.Tests
         }
 
         [Fact]
-        public async Task CanCloseIsTrueWhenItemsAreClosable()
+        public void CanCloseIsTrueWhenItemsAreClosable()
         {
             var conductor = new Conductor<IScreen>.Collection.OneActive();
             var conducted = new StateScreen
@@ -43,15 +41,15 @@ namespace Caliburn.Micro.Core.Tests
             };
             conductor.Items.Add(conducted);
 
-            await ((IActivate)conductor).ActivateAsync(CancellationToken.None);
-            var canClose =await conductor.CanCloseAsync(CancellationToken.None);
+            ((IActivate)conductor).Activate();
+            var canClose = conductor.CanClose();
 
             Assert.True(canClose);
             Assert.False(conducted.IsClosed);
         }
 
         [Fact(Skip = "Investigating close issue. http://caliburnmicro.codeplex.com/discussions/275824")]
-        public async Task CanCloseIsTrueWhenItemsAreNotClosableAndCloseStrategyCloses()
+        public void CanCloseIsTrueWhenItemsAreNotClosableAndCloseStrategyCloses()
         {
             var conductor = new Conductor<IScreen>.Collection.OneActive
             {
@@ -62,32 +60,32 @@ namespace Caliburn.Micro.Core.Tests
                 IsClosable = true
             };
             conductor.Items.Add(conducted);
-            await((IActivate)conductor).ActivateAsync(CancellationToken.None);
-            var canClose = await conductor.CanCloseAsync(CancellationToken.None);
+            ((IActivate)conductor).Activate();
+            var canClose = conductor.CanClose();
 
             Assert.True(canClose);
             Assert.True(conducted.IsClosed);
         }
 
         [Fact]
-        public async Task ChildrenAreActivatedIfConductorIsActive()
+        public void ChildrenAreActivatedIfConductorIsActive()
         {
             var conductor = new Conductor<IScreen>.Collection.OneActive();
             var conducted = new Screen();
             conductor.Items.Add(conducted);
-            await ((IActivate)conductor).ActivateAsync(CancellationToken.None);
-            await conductor.ActivateItemAsync(conducted);
+            ((IActivate)conductor).Activate();
+            conductor.ActivateItem(conducted);
             Assert.True(conducted.IsActive);
             Assert.Equal(conducted, conductor.ActiveItem);
         }
 
         [Fact(Skip = "ActiveItem currently set regardless of IsActive value. See http://caliburnmicro.codeplex.com/discussions/276375")]
-        public async Task ChildrenAreNotActivatedIfConductorIsNotActive()
+        public void ChildrenAreNotActivatedIfConductorIsNotActive()
         {
             var conductor = new Conductor<IScreen>.Collection.OneActive();
             var conducted = new Screen();
             conductor.Items.Add(conducted);
-            await ((IActivate)conductor).ActivateAsync(CancellationToken.None);
+            ((IActivate)conductor).Activate();
             Assert.False(conducted.IsActive);
             Assert.NotEqual(conducted, conductor.ActiveItem);
         }

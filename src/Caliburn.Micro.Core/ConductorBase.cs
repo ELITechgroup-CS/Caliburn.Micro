@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace Caliburn.Micro
 {
@@ -20,13 +18,13 @@ namespace Caliburn.Micro
         /// <value>The close strategy.</value>
         public ICloseStrategy<T> CloseStrategy
         {
-            get => _closeStrategy ?? (_closeStrategy = new DefaultCloseStrategy<T>());
+            get => _closeStrategy ??= new DefaultCloseStrategy<T>();
             set => _closeStrategy = value;
         }
 
-        Task IConductor.DeactivateItemAsync(object item, bool close, CancellationToken cancellationToken)
+        void IConductor.DeactivateItem(object item, bool close)
         {
-            return DeactivateItemAsync((T)item, close, cancellationToken);
+            DeactivateItem((T)item, close);
         }
 
         IEnumerable IParent.GetChildren()
@@ -45,9 +43,9 @@ namespace Caliburn.Micro
         /// <returns>The collection of children.</returns>
         public abstract IEnumerable<T> GetChildren();
 
-        Task IConductor.ActivateItemAsync(object item, CancellationToken cancellationToken)
+        void IConductor.ActivateItem(object item)
         {
-            return ActivateItemAsync((T)item, cancellationToken);
+            ActivateItem((T)item);
         }
 
         /// <summary>
@@ -56,7 +54,7 @@ namespace Caliburn.Micro
         /// <param name="item">The item to activate.</param>
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>A task that represents the asynchronous operation.</returns>
-        public abstract Task ActivateItemAsync(T item, CancellationToken cancellationToken = default);
+        public abstract void ActivateItem(T item);
 
         /// <summary>
         /// Deactivates the specified item.
@@ -65,7 +63,7 @@ namespace Caliburn.Micro
         /// <param name="close">Indicates whether or not to close the item after deactivating it.</param>
         /// <param name="cancellationToken">The cancellation token to cancel operation.</param>
         /// <returns>A task that represents the asynchronous operation.</returns>
-        public abstract Task DeactivateItemAsync(T item, bool close, CancellationToken cancellationToken = default);
+        public abstract void DeactivateItem(T item, bool close);
 
         /// <summary>
         /// Called by a subclass when an activation needs processing.
