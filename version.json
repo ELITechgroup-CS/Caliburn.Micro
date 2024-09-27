@@ -1,6 +1,6 @@
 {
     "$schema": "https://raw.githubusercontent.com/AArnott/Nerdbank.GitVersioning/master/src/NerdBank.GitVersioning/version.schema.json",
-    "version": "5.0-vitalscientific",
+    "version": "2024.9.27",
     "nugetPackageVersion": {
         "semVer": 2
     },
