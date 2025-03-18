@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace Caliburn.Micro
 {
@@ -16,7 +15,10 @@ namespace Caliburn.Micro
         public static void InvokeAll<TEventArgs>(this EventHandler<TEventArgs> handler, object sender, TEventArgs e)
             where TEventArgs : EventArgs
         {
-            Parallel.ForEach(handler.GetHandlers(), handler => handler(sender, e));
+            foreach (var item in handler.GetHandlers())
+            {
+                item(sender, e);
+            }
         }
     }
 }
